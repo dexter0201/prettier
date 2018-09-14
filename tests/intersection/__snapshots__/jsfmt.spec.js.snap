@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`intersection.js 1`] = `
+exports[`intersection.js - flow-verify 1`] = `
 export type ReallyBigSocketServer = ReallyBigSocketServerInterface & ReallyBigSocketServerStatics;
+
+type Props = {
+  propA: X
+} & {
+  propB: X
+} & {
+  propC: X
+} & {
+  propD: X
+};
 
 type Props = {
   focusedChildren?: React.Children,
@@ -41,6 +51,16 @@ type DuplexStreamOptions = ReadableStreamOptions &
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export type ReallyBigSocketServer = ReallyBigSocketServerInterface &
   ReallyBigSocketServerStatics;
+
+type Props = {
+  propA: X
+} & {
+  propB: X
+} & {
+  propC: X
+} & {
+  propD: X
+};
 
 type Props = {
   focusedChildren?: React.Children,

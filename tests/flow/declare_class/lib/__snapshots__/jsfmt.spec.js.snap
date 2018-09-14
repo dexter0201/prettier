@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test.js 1`] = `
+exports[`test.js - flow-verify 1`] = `
 declare class _C {
   foo(): number;
 }
@@ -12,13 +12,13 @@ declare class D extends _module.C {
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 declare class _C {
-  foo(): number
+  foo(): number;
 }
 declare var _module: {
   C: Class<_C>
 };
 declare class D extends _module.C {
-  foo(): string
+  foo(): string;
 }
 
 `;

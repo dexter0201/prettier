@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`import.js 1`] = `
+exports[`import.js - flow-verify 1`] = `
 interface I { x: number }
 export type J = I; // workaround for export interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -9,7 +9,7 @@ export type J = I; // workaround for export interface
 
 `;
 
-exports[`indexer.js 1`] = `
+exports[`indexer.js - flow-verify 1`] = `
 // @flow
 
 interface Ok {
@@ -24,17 +24,17 @@ interface Bad {
 // @flow
 
 interface Ok {
-  [key: string]: string
+  [key: string]: string;
 }
 
 interface Bad {
-  [k1: string]: string,
-  [k2: number]: number // error: not supported (yet)
+  [k1: string]: string;
+  [k2: number]: number; // error: not supported (yet)
 }
 
 `;
 
-exports[`interface.js 1`] = `
+exports[`interface.js - flow-verify 1`] = `
 declare class C { x: number; }
 
 var x: string = new C().x;
@@ -63,7 +63,7 @@ function testInterfaceName(o: I) {
 
 `;
 
-exports[`test.js 1`] = `
+exports[`test.js - flow-verify 1`] = `
 interface I { y: string }
 interface I_ { x: number }
 interface J extends I, I_ { }
@@ -74,8 +74,6 @@ var k: K = { x: "", y: "" }; // error: x should be number
 (k.y: string);
 
 declare class C { x: number }
-declare class D extends C, Other { } // error: multiple extends
-//declare class E implements I { } // parse error
 
 interface A<Y> { y: Y }
 interface A_<X> { x: X }
@@ -97,8 +95,6 @@ var k: K = { x: "", y: "" }; // error: x should be number
 (k.y: string);
 
 declare class C { x: number }
-declare class D extends C, Other {} // error: multiple extends
-//declare class E implements I { } // parse error
 
 interface A<Y> { y: Y }
 interface A_<X> { x: X }
@@ -112,7 +108,7 @@ var e: E<number> = { x: "", y: "", z: "" }; // error: x and z should be numbers
 
 `;
 
-exports[`test2.js 1`] = `
+exports[`test2.js - flow-verify 1`] = `
 import type { J } from './import';
 interface K { }
 interface L extends J, K { y: string }
@@ -145,7 +141,7 @@ function bar(m: M) {
 
 `;
 
-exports[`test3.js 1`] = `
+exports[`test3.js - flow-verify 1`] = `
 interface I { x: number, y : string }
 interface J { y : number }
 interface K extends I, J { x: string } // error: x is number in I
@@ -154,7 +150,7 @@ function foo(k: K) {
   (k.y: number); // error: y is string in I
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-interface I { x: number, y: string }
+interface I { x: number; y: string }
 interface J { y: number }
 interface K extends I, J { x: string } // error: x is number in I
 function foo(k: K) {
@@ -164,7 +160,7 @@ function foo(k: K) {
 
 `;
 
-exports[`test4.js 1`] = `
+exports[`test4.js - flow-verify 1`] = `
 interface I { foo(x: number): void; }
 (function foo(x: number) { }: I); // error, property \`foo\` not found function
 
@@ -179,8 +175,8 @@ interface I { foo(x: number): void }
 (function foo(x: number) {}: I); // error, property \`foo\` not found function
 
 declare class C {
-  bar(i: I): void,
-  bar(f: (x: number) => void): void
+  bar(i: I): void;
+  bar(f: (x: number) => void): void;
 }
 
 new C().bar((x: string) => {}); // error, number ~/~> string

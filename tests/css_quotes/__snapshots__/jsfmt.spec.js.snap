@@ -1,10 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`quotes.css 1`] = `
+exports[`quotes.css - css-verify 1`] = `
 @charset "UTF-8";
 /* @charset must always have double quotes: https://www.w3.org/TR/css-syntax-3/#determine-the-fallback-encoding */
 /* Also, it has to be the very first thing in the file, but here are some more tests anyway: */
-@CHARSET "UTF-8"; /* Case insensitive for "consistency". */
 @charset 'UTF-8'; /* Single quotes are invalid here. Keep them since we don't know what the user is doing. */
 
 @supports (content: one "two" three 'four') {
@@ -76,6 +75,13 @@ exports[`quotes.css 1`] = `
 }
 
 @import "file.css";
+@import 'file.css';
+
+@import url("foo.css");
+@import url('foo.css');
+
+@import "foo.css" screen and (orientation: landscape);
+@import 'foo.css' screen and (orientation: landscape);
 
 @foo "one";
 @foo 'one';
@@ -90,7 +96,6 @@ one 'two' three {}
 @charset "UTF-8";
 /* @charset must always have double quotes: https://www.w3.org/TR/css-syntax-3/#determine-the-fallback-encoding */
 /* Also, it has to be the very first thing in the file, but here are some more tests anyway: */
-@CHARSET "UTF-8"; /* Case insensitive for "consistency". */
 @charset 'UTF-8'; /* Single quotes are invalid here. Keep them since we don't know what the user is doing. */
 
 @supports (content: one "two" three "four") {
@@ -156,19 +161,26 @@ one 'two' three {}
     content: 'var backslash = "\\\\", doubleQuote = \\'"\\';';
 
     /* Leave all "escapes" alone. */
-    content: "\\Abc4 foo \\n" "\\end";
-    content: "\\Abc4 foo \\n" "\\end";
+    content: "\\Abc4 foo \\n" /* "comment" */ "\\end";
+    content: "\\Abc4 foo \\n" /* 'comment' */ "\\end";
   }
 }
 
 @import "file.css";
+@import "file.css";
+
+@import url("foo.css");
+@import url("foo.css");
+
+@import "foo.css" screen and (orientation: landscape);
+@import "foo.css" screen and (orientation: landscape);
 
 @foo "one";
-@foo "one";
-@foo "one" two "three";
+@foo 'one';
+@foo "one" two 'three';
 @foo ("one");
-@foo ("one");
-@foo ("one" two "three");
+@foo ('one');
+@foo ("one" two 'three');
 
 one "two" three {
 }
@@ -177,11 +189,10 @@ one "two" three {
 
 `;
 
-exports[`quotes.css 2`] = `
+exports[`quotes.css - css-verify 2`] = `
 @charset "UTF-8";
 /* @charset must always have double quotes: https://www.w3.org/TR/css-syntax-3/#determine-the-fallback-encoding */
 /* Also, it has to be the very first thing in the file, but here are some more tests anyway: */
-@CHARSET "UTF-8"; /* Case insensitive for "consistency". */
 @charset 'UTF-8'; /* Single quotes are invalid here. Keep them since we don't know what the user is doing. */
 
 @supports (content: one "two" three 'four') {
@@ -253,6 +264,13 @@ exports[`quotes.css 2`] = `
 }
 
 @import "file.css";
+@import 'file.css';
+
+@import url("foo.css");
+@import url('foo.css');
+
+@import "foo.css" screen and (orientation: landscape);
+@import 'foo.css' screen and (orientation: landscape);
 
 @foo "one";
 @foo 'one';
@@ -267,7 +285,6 @@ one 'two' three {}
 @charset "UTF-8";
 /* @charset must always have double quotes: https://www.w3.org/TR/css-syntax-3/#determine-the-fallback-encoding */
 /* Also, it has to be the very first thing in the file, but here are some more tests anyway: */
-@CHARSET "UTF-8"; /* Case insensitive for "consistency". */
 @charset 'UTF-8'; /* Single quotes are invalid here. Keep them since we don't know what the user is doing. */
 
 @supports (content: one 'two' three 'four') {
@@ -333,19 +350,26 @@ one 'two' three {}
     content: 'var backslash = "\\\\", doubleQuote = \\'"\\';';
 
     /* Leave all "escapes" alone. */
-    content: '\\Abc4 foo \\n' '\\end';
-    content: '\\Abc4 foo \\n' '\\end';
+    content: '\\Abc4 foo \\n' /* "comment" */ '\\end';
+    content: '\\Abc4 foo \\n' /* 'comment' */ '\\end';
   }
 }
 
 @import 'file.css';
+@import 'file.css';
 
+@import url('foo.css');
+@import url('foo.css');
+
+@import 'foo.css' screen and (orientation: landscape);
+@import 'foo.css' screen and (orientation: landscape);
+
+@foo "one";
 @foo 'one';
-@foo 'one';
-@foo 'one' two 'three';
+@foo "one" two 'three';
+@foo ("one");
 @foo ('one');
-@foo ('one');
-@foo ('one' two 'three');
+@foo ("one" two 'three');
 
 one 'two' three {
 }

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`classes.js 1`] = `
+exports[`classes.js - flow-verify 1`] = `
 // @flow
 
 class Foo {
@@ -67,7 +67,7 @@ function bar(x: Bar): string {
 
 `;
 
-exports[`interfaces-neg.js 1`] = `
+exports[`interfaces-neg.js - flow-verify 1`] = `
 /* @flow */
 
 declare interface IDataBase {
@@ -98,16 +98,16 @@ if (data.kind === "user") {
 /* @flow */
 
 declare interface IDataBase {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 declare interface IUserData extends IDataBase {
-  kind: "user"
+  kind: "user";
 }
 
 declare interface ISystemData extends IDataBase {
-  kind: "system"
+  kind: "system";
 }
 
 declare type IData = IUserData | ISystemData;
@@ -124,7 +124,7 @@ if (data.kind === "user") {
 
 `;
 
-exports[`interfaces-pos.js 1`] = `
+exports[`interfaces-pos.js - flow-verify 1`] = `
 /* @flow */
 
 declare interface IDataBase {
@@ -155,16 +155,16 @@ if (data.kind === "system") {
 /* @flow */
 
 declare interface IDataBase {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 declare interface IUserData extends IDataBase {
-  kind: "user"
+  kind: "user";
 }
 
 declare interface ISystemData extends IDataBase {
-  kind: "system"
+  kind: "system";
 }
 
 declare type IData = IUserData | ISystemData;
@@ -181,7 +181,7 @@ if (data.kind === "system") {
 
 `;
 
-exports[`type-decls-neg.js 1`] = `
+exports[`type-decls-neg.js - flow-verify 1`] = `
 /* @flow */
 
 type DataBase = {
@@ -246,7 +246,7 @@ if (data.kind === "user") {
 
 `;
 
-exports[`type-decls-pos.js 1`] = `
+exports[`type-decls-pos.js - flow-verify 1`] = `
 /* @flow */
 
 type DataBase = {

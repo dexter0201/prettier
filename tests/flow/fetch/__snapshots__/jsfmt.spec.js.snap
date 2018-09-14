@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`fetch.js 1`] = `
+exports[`fetch.js - flow-verify 1`] = `
 /* @flow */
 
 // most of the details are tested in the separate file
@@ -53,20 +53,20 @@ const d: Promise<Blob> = fetch("image.png"); // incorrect
 
 `;
 
-exports[`headers.js 1`] = `
+exports[`headers.js - flow-verify 1`] = `
 /* @flow */
 
 const a = new Headers("'Content-Type': 'image/jpeg'"); // not correct
 const b = new Headers(['Content-Type', 'image/jpeg']); // not correct
-const c = new Headers({'Content-Type', 'image/jpeg'}); // correct
+const c = new Headers({'Content-Type': 'image/jpeg'}); // correct
 const d = new Headers(c); // correct
 const e: Headers = new Headers(); // correct
 e.append('Content-Type', 'image/jpeg'); // correct
 e.append('Content-Type'); // not correct
-e.append({'Content-Type', 'image/jpeg'}); // not correct
+e.append({'Content-Type': 'image/jpeg'}); // not correct
 e.set('Content-Type', 'image/jpeg'); // correct
 e.set('Content-Type'); // not correct
-e.set({'Content-Type', 'image/jpeg'}); // not correct
+e.set({'Content-Type': 'image/jpeg'}); // not correct
 
 const f: Headers = e.append('Content-Type', 'image/jpeg'); // not correct
 
@@ -91,15 +91,15 @@ e.forEach(() => {}, {}); // correct
 
 const a = new Headers("'Content-Type': 'image/jpeg'"); // not correct
 const b = new Headers(["Content-Type", "image/jpeg"]); // not correct
-const c = new Headers({ "Content-Type", "image/jpeg" }); // correct
+const c = new Headers({ "Content-Type": "image/jpeg" }); // correct
 const d = new Headers(c); // correct
 const e: Headers = new Headers(); // correct
 e.append("Content-Type", "image/jpeg"); // correct
 e.append("Content-Type"); // not correct
-e.append({ "Content-Type", "image/jpeg" }); // not correct
+e.append({ "Content-Type": "image/jpeg" }); // not correct
 e.set("Content-Type", "image/jpeg"); // correct
 e.set("Content-Type"); // not correct
-e.set({ "Content-Type", "image/jpeg" }); // not correct
+e.set({ "Content-Type": "image/jpeg" }); // not correct
 
 const f: Headers = e.append("Content-Type", "image/jpeg"); // not correct
 
@@ -122,7 +122,7 @@ e.forEach(() => {}, {}); // correct
 
 `;
 
-exports[`request.js 1`] = `
+exports[`request.js - flow-verify 1`] = `
 /* @flow */
 const a: Request = new Request(); // incorrect
 const b: Request = new Request('http://example.org'); // correct
@@ -253,7 +253,7 @@ new Request("/", { method: null }); // incorrect
 
 `;
 
-exports[`response.js 1`] = `
+exports[`response.js - flow-verify 1`] = `
 /* @flow */
 const a: Response = new Response(); // correct
 const b: Response = new Response(new Blob()); // correct
@@ -346,20 +346,20 @@ h.arrayBuffer().then((ab: Buffer) => ab); // incorrect
 
 `;
 
-exports[`urlsearchparams.js 1`] = `
+exports[`urlsearchparams.js - flow-verify 1`] = `
 /* @flow */
 
 const a = new URLSearchParams("key1=value1"); // correct
 const b = new URLSearchParams(['key1', 'value1']); // not correct
-const c = new URLSearchParams({'key1', 'value1'}); // not correct
+const c = new URLSearchParams({'key1': 'value1'}); // not correct
 const d = new URLSearchParams(c); // correct
 const e: URLSearchParams = new URLSearchParams(); // correct
 e.append('key1', 'value1'); // correct
 e.append('key1'); // not correct
-e.append({'key1', 'value1'}); // not correct
+e.append({'key1': 'value1'}); // not correct
 e.set('key1', 'value1'); // correct
 e.set('key1'); // not correct
-e.set({'key1', 'value1'}); // not correct
+e.set({'key1': 'value1'}); // not correct
 
 const f: URLSearchParams = e.append('key1', 'value1'); // not correct
 
@@ -385,15 +385,15 @@ e.forEach(() => {}, {}); // correct
 
 const a = new URLSearchParams("key1=value1"); // correct
 const b = new URLSearchParams(["key1", "value1"]); // not correct
-const c = new URLSearchParams({ "key1", "value1" }); // not correct
+const c = new URLSearchParams({ key1: "value1" }); // not correct
 const d = new URLSearchParams(c); // correct
 const e: URLSearchParams = new URLSearchParams(); // correct
 e.append("key1", "value1"); // correct
 e.append("key1"); // not correct
-e.append({ "key1", "value1" }); // not correct
+e.append({ key1: "value1" }); // not correct
 e.set("key1", "value1"); // correct
 e.set("key1"); // not correct
-e.set({ "key1", "value1" }); // not correct
+e.set({ key1: "value1" }); // not correct
 
 const f: URLSearchParams = e.append("key1", "value1"); // not correct
 

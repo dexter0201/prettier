@@ -1,1 +1,2 @@
-run_spec(__dirname, { parser: "postcss" });
+run_spec(__dirname, ["css"]);
+run_spec(__dirname, ["scss"], { trailingComma: "es5" });

@@ -2,21 +2,31 @@
 
 const runPrettier = require("../runPrettier");
 
-test("ignore path", () => {
-  const result = runPrettier("cli/ignore-path", [
+describe("ignore path", () => {
+  runPrettier("cli/ignore-path", [
     "**/*.js",
     "--ignore-path",
     ".gitignore",
     "-l"
-  ]);
-
-  expect(result.stdout).toMatchSnapshot();
-  expect(result.status).toEqual(1);
+  ]).test({
+    status: 1
+  });
 });
 
-test("support .prettierignore", () => {
-  const result = runPrettier("cli/ignore-path", ["**/*.js", "-l"]);
+describe("support .prettierignore", () => {
+  runPrettier("cli/ignore-path", ["**/*.js", "-l"]).test({
+    status: 1
+  });
+});
 
-  expect(result.stdout).toMatchSnapshot();
-  expect(result.status).toEqual(1);
+describe("ignore file when using --debug-check", () => {
+  runPrettier("cli/ignore-path", ["**/*.js", "--debug-check"]).test({
+    status: 0
+  });
+});
+
+describe("outputs files as-is if no --write", () => {
+  runPrettier("cli/ignore-path", ["regular-module.js"]).test({
+    status: 0
+  });
 });

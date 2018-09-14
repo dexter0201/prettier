@@ -1,10 +1,11 @@
-
 ## Configuration
+
 In the project repo, the `docs` folder is used to hold documentation written in markdown. A `blog` folder can be used to hold blog posts written in markdown.
 
 ### Document and Blog Front Matters
 
 Documentation should contain front matter that follows this example:
+
 ```
 ---
 id: doc1 <!-- used for docs to find each other and to map links -->
@@ -19,6 +20,7 @@ next: doc2 <!-- next doc on the sidebar for navigation -->
 ```
 
 Blog posts should be written as markdown files with the following front matter:
+
 ```
 ---
 title: Blog Post Title
@@ -27,6 +29,7 @@ authorURL: http://twitter.com/author <!-- (or some other link) -->
 authorFBID: 21315325 <!-- id to get author's picture -->
 ---
 ```
+
 In the blog post you should include a line `<!--truncate-->`. This will determine under which point text will be ignored when generating the preview of your blog post. Blog posts should have the file name format: `yyyy-mm-dd-your-file-name.md`.
 
 ### Language Configurations
@@ -45,24 +48,25 @@ All images and other static assets you wish to include should be placed inside t
 
 Files placed in `static/` will be accessible in the following way: `static/img/image.png` will be accessible at `img/image.png`.
 
+Please run <code>yarn svgo _path/to/image.svg_</code> before committing a new SVG to the repository.
+
 ## Using Docusaurus
 
 ### Run the Server
 
 To run your website locally run the script:
 
-```
+```bash
 yarn start
 ```
 
-This will start a server hosting your website locally at `localhost:3000`. This server will ignore any occurences `siteConfig.baseUrl` in URLs, e.g. `localhost:3000/your-site/index.html` will be the same as `localhost:3000/index.html`. Any changes to configured files will be reflected by refreshing the page, i.e. the server does not need to be restarted to show changes.
-
+This will start a server hosting your website locally at `localhost:3000`. This server will ignore any occurrences `siteConfig.baseUrl` in URLs, e.g. `localhost:3000/your-site/index.html` will be the same as `localhost:3000/index.html`. Any changes to configured files will be reflected by refreshing the page, i.e. the server does not need to be restarted to show changes.
 
 ### Build Static Pages
 
 To create a static build of your website, run the script:
 
-```
+```bash
 yarn build
 ```
 
@@ -100,3 +104,7 @@ If you wish to manually publish your website with the `publish-gh-pages` script,
 ```
 DEPLOY_USER=deltice GIT_USER=test-site-bot CIRCLE_PROJECT_USERNAME=deltice CIRCLE_PROJECT_REPONAME=test-site CIRCLE_BRANCH=master npm run publish-gh-pages
 ```
+
+## Playground
+
+The playground is not integrated with the Docusaurus infrastructure. If you want to edit something in the playground, you need to run `yarn start` to start the Docusaurus server and `webpack --watch` in a separate shell to compile the playground changes.

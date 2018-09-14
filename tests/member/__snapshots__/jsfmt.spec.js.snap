@@ -1,6 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`expand.js 1`] = `
+exports[`conditional.js - flow-verify 1`] = `
+(valid
+  ? helper.responseBody(this.currentUser)
+  : helper.responseBody(this.defaultUser))
+.prop;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(valid
+  ? helper.responseBody(this.currentUser)
+  : helper.responseBody(this.defaultUser)
+).prop;
+
+`;
+
+exports[`expand.js - flow-verify 1`] = `
 const veryVeryVeryVeryVeryVeryVeryLong = doc.expandedStates[doc.expandedStates.length - 1];
 const small = doc.expandedStates[doc.expandedStates.length - 1];
 
@@ -21,6 +34,21 @@ const promises = [
   redis.fetch(),
   other.fetch(),
 ];
+
+window.FooClient.setVars({
+  locale: getFooLocale({ page }),
+  authorizationToken: data.token
+}).initVerify("foo_container");
+
+window.something.FooClient.setVars({
+  locale: getFooLocale({ page }),
+  authorizationToken: data.token
+}).initVerify("foo_container");
+
+window.FooClient.something.setVars({
+  locale: getFooLocale({ page }),
+  authorizationToken: data.token
+}).initVerify("foo_container");
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const veryVeryVeryVeryVeryVeryVeryLong =
   doc.expandedStates[doc.expandedStates.length - 1];
@@ -51,5 +79,37 @@ const promises = [
   redis.fetch(),
   other.fetch()
 ];
+
+window.FooClient.setVars({
+  locale: getFooLocale({ page }),
+  authorizationToken: data.token
+}).initVerify("foo_container");
+
+window.something.FooClient.setVars({
+  locale: getFooLocale({ page }),
+  authorizationToken: data.token
+}).initVerify("foo_container");
+
+window.FooClient.something
+  .setVars({
+    locale: getFooLocale({ page }),
+    authorizationToken: data.token
+  })
+  .initVerify("foo_container");
+
+`;
+
+exports[`logical.js - flow-verify 1`] = `
+(veryLongVeryLongVeryLong || e).prop;
+
+(veryLongVeryLongVeryLong || anotherVeryLongVeryLongVeryLong || veryVeryVeryLongError).prop;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(veryLongVeryLongVeryLong || e).prop;
+
+(
+  veryLongVeryLongVeryLong ||
+  anotherVeryLongVeryLongVeryLong ||
+  veryVeryVeryLongError
+).prop;
 
 `;

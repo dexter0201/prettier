@@ -1,28 +1,42 @@
 "use strict";
 
-const isProduction = process.env.NODE_ENV === "production";
 const fs = require("fs");
 const extname = require("path").extname;
-const prettier = require(isProduction ? "../dist/" : "../");
-const parser = require("../src/parser");
-const massageAST = require("../src/clean-ast.js").massageAST;
+const raw = require("jest-snapshot-serializer-raw").wrap;
 
 const AST_COMPARE = process.env["AST_COMPARE"];
-const VERIFY_ALL_PARSERS = process.env["VERIFY_ALL_PARSERS"] || false;
-const ALL_PARSERS = process.env["ALL_PARSERS"]
-  ? JSON.parse(process.env["ALL_PARSERS"])
-  : ["flow", "graphql", "babylon", "typescript"];
+const TEST_STANDALONE = process.env["TEST_STANDALONE"];
 
-function run_spec(dirname, options, additionalParsers) {
+const prettier = !TEST_STANDALONE
+  ? require("prettier/local")
+  : require("prettier/standalone");
+
+function run_spec(dirname, parsers, options) {
+  /* instabul ignore if */
+  if (!parsers || !parsers.length) {
+    throw new Error(`No parsers were specified for ${dirname}`);
+  }
+
   fs.readdirSync(dirname).forEach(filename => {
+    // We need to have a skipped test with the same name of the snapshots,
+    // so Jest doesn't mark them as obsolete.
+    if (TEST_STANDALONE && parsers.some(skipStandalone)) {
+      parsers.forEach(parser =>
+        test.skip(`${filename} - ${parser}-verify`, () => {})
+      );
+      return;
+    }
+
     const path = dirname + "/" + filename;
     if (
       extname(filename) !== ".snap" &&
       fs.lstatSync(path).isFile() &&
+      filename[0] !== "." &&
       filename !== "jsfmt.spec.js"
     ) {
       let rangeStart = 0;
       let rangeEnd = Infinity;
+      let cursorOffset;
       const source = read(path)
         .replace(/\r\n/g, "\n")
         .replace("<<<PRETTIER_RANGE_START>>>", (match, offset) => {
@@ -34,49 +48,48 @@ function run_spec(dirname, options, additionalParsers) {
           return "";
         });
 
-      const mergedOptions = Object.assign(mergeDefaultOptions(options || {}), {
-        rangeStart: rangeStart,
-        rangeEnd: rangeEnd
-      });
-      const output = prettyprint(source, path, mergedOptions);
-      test(`${mergedOptions.parser} - ${parser.parser}-verify`, () => {
-        expect(raw(source + "~".repeat(80) + "\n" + output)).toMatchSnapshot(
-          filename
-        );
+      const input = source.replace("<|>", (match, offset) => {
+        cursorOffset = offset;
+        return "";
       });
 
-      getParsersToVerify(
-        mergedOptions.parser,
-        additionalParsers || []
-      ).forEach(parserName => {
-        test(`${filename} - ${parserName}-verify`, () => {
-          const verifyOptions = Object.assign(mergedOptions, {
-            parser: parserName
-          });
-          const verifyOutput = prettyprint(source, path, verifyOptions);
+      const mergedOptions = Object.assign(mergeDefaultOptions(options || {}), {
+        parser: parsers[0],
+        rangeStart,
+        rangeEnd,
+        cursorOffset
+      });
+      const output = prettyprint(input, path, mergedOptions);
+      test(`${filename} - ${mergedOptions.parser}-verify`, () => {
+        expect(
+          raw(source + "~".repeat(mergedOptions.printWidth) + "\n" + output)
+        ).toMatchSnapshot();
+      });
+
+      parsers.slice(1).forEach(parser => {
+        const verifyOptions = Object.assign({}, mergedOptions, { parser });
+        test(`${filename} - ${parser}-verify`, () => {
+          const verifyOutput = prettyprint(input, path, verifyOptions);
           expect(output).toEqual(verifyOutput);
         });
       });
 
       if (AST_COMPARE) {
-        const ast = parse(source, mergedOptions);
-        const astMassaged = massageAST(ast);
-        let ppastMassaged;
-        let pperr = null;
-        try {
-          const ppast = parse(
-            prettyprint(source, path, mergedOptions),
-            mergedOptions
-          );
-          ppastMassaged = massageAST(ppast);
-        } catch (e) {
-          pperr = e.stack;
-        }
+        test(`${path} parse`, () => {
+          const compareOptions = Object.assign({}, mergedOptions);
+          delete compareOptions.cursorOffset;
+          const astMassaged = parse(input, compareOptions);
+          let ppastMassaged = undefined;
 
-        test(path + " parse", () => {
-          expect(pperr).toBe(null);
+          expect(() => {
+            ppastMassaged = parse(
+              prettyprint(input, path, compareOptions),
+              compareOptions
+            );
+          }).not.toThrow();
+
           expect(ppastMassaged).toBeDefined();
-          if (!ast.errors || ast.errors.length === 0) {
+          if (!astMassaged.errors || astMassaged.errors.length === 0) {
             expect(astMassaged).toEqual(ppastMassaged);
           }
         });
@@ -84,38 +97,15 @@ function run_spec(dirname, options, additionalParsers) {
     }
   });
 }
+
 global.run_spec = run_spec;
 
-function stripLocation(ast) {
-  if (Array.isArray(ast)) {
-    return ast.map(e => stripLocation(e));
-  }
-  if (typeof ast === "object") {
-    const newObj = {};
-    for (const key in ast) {
-      if (
-        key === "loc" ||
-        key === "range" ||
-        key === "raw" ||
-        key === "comments" ||
-        key === "parent" ||
-        key === "prev"
-      ) {
-        continue;
-      }
-      newObj[key] = stripLocation(ast[key]);
-    }
-    return newObj;
-  }
-  return ast;
-}
-
 function parse(string, opts) {
-  return stripLocation(parser.parse(string, opts));
+  return prettier.__debug.parse(string, opts, /* massage */ true).ast;
 }
 
 function prettyprint(src, filename, options) {
-  return prettier.format(
+  const result = prettier.formatWithCursor(
     src,
     Object.assign(
       {
@@ -124,37 +114,28 @@ function prettyprint(src, filename, options) {
       options
     )
   );
+  if (options.cursorOffset >= 0) {
+    result.formatted =
+      result.formatted.slice(0, result.cursorOffset) +
+      "<|>" +
+      result.formatted.slice(result.cursorOffset);
+  }
+  return result.formatted;
 }
 
 function read(filename) {
   return fs.readFileSync(filename, "utf8");
 }
 
-/**
- * Wraps a string in a marker object that is used by `./raw-serializer.js` to
- * directly print that string in a snapshot without escaping all double quotes.
- * Backticks will still be escaped.
- */
-function raw(string) {
-  if (typeof string !== "string") {
-    throw new Error("Raw snapshots have to be strings.");
-  }
-  return { [Symbol.for("raw")]: string };
+function skipStandalone(parser) {
+  return new Set(["parse5"]).has(parser);
 }
 
 function mergeDefaultOptions(parserConfig) {
   return Object.assign(
     {
-      parser: "flow",
       printWidth: 80
     },
     parserConfig
   );
-}
-
-function getParsersToVerify(parser, additionalParsers) {
-  if (VERIFY_ALL_PARSERS) {
-    return ALL_PARSERS.splice(ALL_PARSERS.indexOf(parser), 1);
-  }
-  return additionalParsers;
 }

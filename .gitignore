@@ -1,5 +1,7 @@
+/.cache
 /node_modules
-npm-debug.log
+/scripts/release/node_modules
+*.log
 /errors
 /test.js
 /test.ts
@@ -7,5 +9,12 @@ npm-debug.log
 /.vscode
 /dist
 /website/node_modules
+/website/build
+/website/i18n
+/website/static/playground.js
+/website/static/lib
 .DS_Store
 coverage
+.idea
+package-lock.json
+/test-results

@@ -2,4 +2,5 @@
     name: prettier
     entry: prettier --write
     language: node
-    types: [javascript]
+    # From https://github.com/prettier/prettier/blob/7a7eb170/docs/index.md
+    files: \.(css|less|scss|html|ts|tsx|graphql|gql|json|js|jsx|md)$

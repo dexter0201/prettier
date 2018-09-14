@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getters_and_setters.js 1`] = `
+exports[`getters_and_setters.js - flow-verify 1`] = `
 /**
  * @flow
  */
@@ -58,9 +58,9 @@ type T = {
 };
 
 declare class Foo {
-  get a(): number,
-  set b(x: number): void,
-  c: 10
+  get a(): number;
+  set b(x: number): void;
+  c: 10;
 }
 
 class Bar {

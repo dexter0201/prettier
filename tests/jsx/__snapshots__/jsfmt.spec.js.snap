@@ -1,6 +1,142 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`conditional-expression.js 1`] = `
+exports[`array-iter.js - flow-verify 1`] = `
+const UsersList = ({ users }) => (
+  <section>
+    <h2>Users list</h2>
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  </section>
+)
+
+const TodoList = ({ todos }) => (
+  <div className="TodoList">
+    <ul>{_.map(todos, (todo, i) => <TodoItem key={i} {...todo} />)}</ul>
+  </div>
+);
+
+<div className="search-filter-chips">
+    {scopes
+        .filter(scope => scope.value !== '')
+        .map((scope, i) => (
+            <FilterChip
+                query={this.props.query}
+                onFilterChosen={this.onSearchScopeClicked}
+                key={i}
+                value={scope.value}
+                name={scope.name}
+            />
+        ))}
+</div>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const UsersList = ({ users }) => (
+  <section>
+    <h2>Users list</h2>
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  </section>
+);
+
+const TodoList = ({ todos }) => (
+  <div className="TodoList">
+    <ul>
+      {_.map(todos, (todo, i) => (
+        <TodoItem key={i} {...todo} />
+      ))}
+    </ul>
+  </div>
+);
+
+<div className="search-filter-chips">
+  {scopes
+    .filter(scope => scope.value !== "")
+    .map((scope, i) => (
+      <FilterChip
+        query={this.props.query}
+        onFilterChosen={this.onSearchScopeClicked}
+        key={i}
+        value={scope.value}
+        name={scope.name}
+      />
+    ))}
+</div>;
+
+`;
+
+exports[`attr-comments.js - flow-verify 1`] = `
+<Component
+  propFn={
+    // comment
+    function(arg) {
+      fn(arg);
+    }
+  }
+  propArrowFn={
+    // comment
+    arg => fn(arg)
+  }
+  propArrowWithBreak={
+    // comment
+    arg =>
+      fn({
+        makeItBreak
+      })
+  }
+  propArray={
+    // comment
+    [el1, el2]
+  }
+  propObj={
+    // comment
+    { key: val }
+  }
+  propTemplate={
+    // comment
+    \`text\`
+  }
+/>;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<Component
+  propFn={
+    // comment
+    function(arg) {
+      fn(arg);
+    }
+  }
+  propArrowFn={
+    // comment
+    arg => fn(arg)
+  }
+  propArrowWithBreak={
+    // comment
+    arg =>
+      fn({
+        makeItBreak
+      })
+  }
+  propArray={
+    // comment
+    [el1, el2]
+  }
+  propObj={
+    // comment
+    { key: val }
+  }
+  propTemplate={
+    // comment
+    \`text\`
+  }
+/>;
+
+`;
+
+exports[`conditional-expression.js - flow-verify 1`] = `
 // There are two ways to print ConditionalExpressions: "normal mode" and
 // "JSX mode". This is normal mode (when breaking):
 //
@@ -20,85 +156,19 @@ exports[`conditional-expression.js 1`] = `
 //
 //  test ? consequent : alternate;
 //
-// We print a conditional expression in JSX mode if any of the following are
-// true:
-// * Its parent is a JSXExpressionContainer
-// * Its test, consequent, or alternate are JSXElements
-// * It is in a chain with other ConditionalExpressions, and the outermost
-//   one's parent is a JSXExpressionContainer
-// * It is in a chain with other ConditionalExpressions, and any of the
-//   tests, consequents, or alternates of any of the ConditionalExpressions in
-//   the chain are JSXElements.
+// We only print a conditional expression in JSX mode if its test,
+// consequent, or alternate are JSXElements.
 // Otherwise, we print in normal mode.
 
-// This ConditionalExpression does not meet any of the other criteria for
-// printing in JSX mode, so it prints in normal mode. The line does not break.
+// This ConditionalExpression has no JSXElements so it prints in normal mode.
+// The line does not break.
 normalModeNonBreaking ? "a" : "b";
 
-// This ConditionalExpression does not meet any of the criteria to print in JSX
-// mode, so it prints in normal mode. Its consequent is very long, so it breaks
-// out to multiple lines.
+// This ConditionalExpression has no JSXElements so it prints in normal mode.
+// Its consequent is very long, so it breaks out to multiple lines.
 normalModeBreaking
   ? johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
   : "c";
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. The line does not break, so it does not contain
-// parens.
-<div>
-  {a ? "b" : "c"}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. Because the consequent is long enough to break the
-// line, both its consequent and alternate break out and are wrapped in parens.
-<div>
-  {a ? (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  ) : (
-    "c"
-  )}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. The consequent is long enough to break the line, but
-// because the alternate is null, only the consequent is wrapped in parens.
-<div>
-  {a ? (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  ) : null}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. Because the alternate is long enough to break the
-// line, both its consequent and alternate break out and are wrapped in parens.
-<div>
-  {a ? (
-    "b"
-  ) : (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  )}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. The alternate is long enough to break the line, but
-// because the consequent is null, only the alternate is wrapped in parens.
-<div>
-  {a ? null : (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  )}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. Because the test is long enough to break the
-// line, both its consequent and alternate break out and are wrapped in parens.
-<div>
-  {johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa ? (
-    "b"
-  ) : (
-    "c"
-  )}
-</div>;
 
 // This ConditionalExpression prints in JSX mode because its test is a
 // JSXElement. It is non-breaking.
@@ -153,19 +223,6 @@ jsxModeFromElementBreaking ? (
   {a ? "a" : b ? "b" : "c"}
 </div>;
 
-// This chain of ConditionalExpressions prints in JSX mode because the parent of
-// the outermost ConditionalExpression is a JSXExpressionContainer. It is
-// breaking.
-<div>
-  {a ? (
-    "a"
-  ) : b ? (
-    "b"
-  ) : (
-    thisIsASongAboutYourPoorSickPenguinHeHasAFeverAndHisToesAreBlueButIfISingToYourPoorSickPenguinHeWillFeelBetterInADayOrTwo
-  )}
-</div>;
-
 // This chain of ConditionalExpressions prints in JSX mode because there is a
 // JSX element somewhere in the chain. It is non-breaking.
 cable ? "satellite" : public ? "affairs" : network ? <span id="c" /> : "dunno";
@@ -197,6 +254,20 @@ cable ? (
 ) : affairs ? (
   "network"
 ) : "dunno";
+
+// This chain of ConditionalExpressions prints in JSX mode because there is a
+// JSX element somewhere in the chain. It is breaking; notice the consequents
+// and alternates in the entire chain get wrapped in parens.
+<div>
+  {properties.length > 1 ||
+  (properties.length === 1 && properties[0].apps.size > 1) ? (
+    draggingApp == null || newPropertyName == null ? (
+      <MigrationPropertyListItem />
+    ) : (
+      <MigrationPropertyListItem apps={Immutable.List()} />
+    )
+  ) : null}
+</div>;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // There are two ways to print ConditionalExpressions: "normal mode" and
 // "JSX mode". This is normal mode (when breaking):
@@ -217,83 +288,19 @@ cable ? (
 //
 //  test ? consequent : alternate;
 //
-// We print a conditional expression in JSX mode if any of the following are
-// true:
-// * Its parent is a JSXExpressionContainer
-// * Its test, consequent, or alternate are JSXElements
-// * It is in a chain with other ConditionalExpressions, and the outermost
-//   one's parent is a JSXExpressionContainer
-// * It is in a chain with other ConditionalExpressions, and any of the
-//   tests, consequents, or alternates of any of the ConditionalExpressions in
-//   the chain are JSXElements.
+// We only print a conditional expression in JSX mode if its test,
+// consequent, or alternate are JSXElements.
 // Otherwise, we print in normal mode.
 
-// This ConditionalExpression does not meet any of the other criteria for
-// printing in JSX mode, so it prints in normal mode. The line does not break.
+// This ConditionalExpression has no JSXElements so it prints in normal mode.
+// The line does not break.
 normalModeNonBreaking ? "a" : "b";
 
-// This ConditionalExpression does not meet any of the criteria to print in JSX
-// mode, so it prints in normal mode. Its consequent is very long, so it breaks
-// out to multiple lines.
+// This ConditionalExpression has no JSXElements so it prints in normal mode.
+// Its consequent is very long, so it breaks out to multiple lines.
 normalModeBreaking
   ? johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
   : "c";
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. The line does not break, so it does not contain
-// parens.
-<div>{a ? "b" : "c"}</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. Because the consequent is long enough to break the
-// line, both its consequent and alternate break out and are wrapped in parens.
-<div>
-  {a ? (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  ) : (
-    "c"
-  )}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. The consequent is long enough to break the line, but
-// because the alternate is null, only the consequent is wrapped in parens.
-<div>
-  {a ? (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  ) : null}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. Because the alternate is long enough to break the
-// line, both its consequent and alternate break out and are wrapped in parens.
-<div>
-  {a ? (
-    "b"
-  ) : (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  )}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. The alternate is long enough to break the line, but
-// because the consequent is null, only the alternate is wrapped in parens.
-<div>
-  {a ? null : (
-    johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa
-  )}
-</div>;
-
-// This ConditionalExpression prints in JSX mode because its parent is a
-// JSXExpressionContainer. Because the test is long enough to break the
-// line, both its consequent and alternate break out and are wrapped in parens.
-<div>
-  {johnJacobJingleHeimerSchmidtHisNameIsMyNameTooWheneverWeGoOutThePeopleAlwaysShoutThereGoesJohnJacobJingleHeimerSchmidtYaDaDaDaDaDaDa ? (
-    "b"
-  ) : (
-    "c"
-  )}
-</div>;
 
 // This ConditionalExpression prints in JSX mode because its test is a
 // JSXElement. It is non-breaking.
@@ -352,19 +359,6 @@ jsxModeFromElementBreaking ? (
 // non-breaking.
 <div>{a ? "a" : b ? "b" : "c"}</div>;
 
-// This chain of ConditionalExpressions prints in JSX mode because the parent of
-// the outermost ConditionalExpression is a JSXExpressionContainer. It is
-// breaking.
-<div>
-  {a ? (
-    "a"
-  ) : b ? (
-    "b"
-  ) : (
-    thisIsASongAboutYourPoorSickPenguinHeHasAFeverAndHisToesAreBlueButIfISingToYourPoorSickPenguinHeWillFeelBetterInADayOrTwo
-  )}
-</div>;
-
 // This chain of ConditionalExpressions prints in JSX mode because there is a
 // JSX element somewhere in the chain. It is non-breaking.
 cable ? "satellite" : public ? "affairs" : network ? <span id="c" /> : "dunno";
@@ -405,9 +399,23 @@ cable ? (
   "dunno"
 );
 
+// This chain of ConditionalExpressions prints in JSX mode because there is a
+// JSX element somewhere in the chain. It is breaking; notice the consequents
+// and alternates in the entire chain get wrapped in parens.
+<div>
+  {properties.length > 1 ||
+  (properties.length === 1 && properties[0].apps.size > 1) ? (
+    draggingApp == null || newPropertyName == null ? (
+      <MigrationPropertyListItem />
+    ) : (
+      <MigrationPropertyListItem apps={Immutable.List()} />
+    )
+  ) : null}
+</div>;
+
 `;
 
-exports[`expression.js 1`] = `
+exports[`expression.js - flow-verify 1`] = `
 <View
   style={
     {
@@ -474,6 +482,61 @@ exports[`expression.js 1`] = `
     test
   </Child>
 }/>;
+
+<BookingIntroPanel
+  prop="long_string_make_to_force_break"
+  logClick={data => doLogClick("short", "short", data)}
+/>;
+
+<BookingIntroPanel
+  logClick={data =>
+    doLogClick("long_name_long_name_long_name", "long_name_long_name_long_name", data)
+  }
+/>;
+
+<BookingIntroPanel
+  logClick={data => {
+    doLogClick("long_name_long_name_long_name", "long_name_long_name_long_name", data)
+  }}
+/>;
+
+<Component
+  onChange={(
+    key: "possible_key_1" | "possible_key_2" | "possible_key_3",
+    value: string | Immutable.List<string>,
+  ) => {
+    this.setState({
+      updatedTask: this.state.updatedTask.set(key, value)
+    });
+  }}
+/>;
+
+<BookingIntroPanel>
+  {data => doLogClick("short", "short", data)}
+</BookingIntroPanel>;
+
+<BookingIntroPanel>
+  {data =>
+    doLogClick("long_name_long_name_long_name", "long_name_long_name_long_name", data)
+  }
+</BookingIntroPanel>;
+
+<BookingIntroPanel>
+  {data => {
+    doLogClick("long_name_long_name_long_name", "long_name_long_name_long_name", data)
+  }}
+</BookingIntroPanel>;
+
+<Component>
+  {(
+    key: "possible_key_1" | "possible_key_2" | "possible_key_3",
+    value: string | Immutable.List<string>,
+  ) => {
+    this.setState({
+      updatedTask: this.state.updatedTask.set(key, value)
+    });
+  }}
+</Component>;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 <View
   style={{
@@ -538,9 +601,80 @@ exports[`expression.js 1`] = `
 
 <ParentComponent prop={<Child>test</Child>} />;
 
+<BookingIntroPanel
+  prop="long_string_make_to_force_break"
+  logClick={data => doLogClick("short", "short", data)}
+/>;
+
+<BookingIntroPanel
+  logClick={data =>
+    doLogClick(
+      "long_name_long_name_long_name",
+      "long_name_long_name_long_name",
+      data
+    )
+  }
+/>;
+
+<BookingIntroPanel
+  logClick={data => {
+    doLogClick(
+      "long_name_long_name_long_name",
+      "long_name_long_name_long_name",
+      data
+    );
+  }}
+/>;
+
+<Component
+  onChange={(
+    key: "possible_key_1" | "possible_key_2" | "possible_key_3",
+    value: string | Immutable.List<string>
+  ) => {
+    this.setState({
+      updatedTask: this.state.updatedTask.set(key, value)
+    });
+  }}
+/>;
+
+<BookingIntroPanel>
+  {data => doLogClick("short", "short", data)}
+</BookingIntroPanel>;
+
+<BookingIntroPanel>
+  {data =>
+    doLogClick(
+      "long_name_long_name_long_name",
+      "long_name_long_name_long_name",
+      data
+    )
+  }
+</BookingIntroPanel>;
+
+<BookingIntroPanel>
+  {data => {
+    doLogClick(
+      "long_name_long_name_long_name",
+      "long_name_long_name_long_name",
+      data
+    );
+  }}
+</BookingIntroPanel>;
+
+<Component>
+  {(
+    key: "possible_key_1" | "possible_key_2" | "possible_key_3",
+    value: string | Immutable.List<string>
+  ) => {
+    this.setState({
+      updatedTask: this.state.updatedTask.set(key, value)
+    });
+  }}
+</Component>;
+
 `;
 
-exports[`flow_fix_me.js 1`] = `
+exports[`flow_fix_me.js - flow-verify 1`] = `
 const aDiv = (
   /* $FlowFixMe */
   <div className="foo">
@@ -555,7 +689,7 @@ const aDiv = (
 
 `;
 
-exports[`html_escape.js 1`] = `
+exports[`html_escape.js - flow-verify 1`] = `
 export default () => <a href="https://foo.bar?q1=foo&q2=bar" />;
 
 () => <img src="https://bar.foo?param1=1&param2=2" />;
@@ -566,7 +700,7 @@ export default () => <a href="https://foo.bar?q1=foo&q2=bar" />;
 
 `;
 
-exports[`hug.js 1`] = `
+exports[`hug.js - flow-verify 1`] = `
 <div>
   {__DEV__
     ? this.renderDevApp()
@@ -639,7 +773,7 @@ exports[`hug.js 1`] = `
 
 `;
 
-exports[`logical-expression.js 1`] = `
+exports[`logical-expression.js - flow-verify 1`] = `
 <div>
   {a || "b"}
 </div>;
@@ -654,6 +788,14 @@ exports[`logical-expression.js 1`] = `
 
 <div>
   {a && <span></span>}
+</div>;
+
+<div>
+  {a && <span>make this text just so long enough to break this to the next line</span>}
+</div>;
+
+<div>
+  {a && b && <span>make this text just so long enough to break this to the next line</span>}
 </div>;
 
 <div>
@@ -675,6 +817,23 @@ exports[`logical-expression.js 1`] = `
 <div>
   {a && (
     <span>
+      make this text just so long enough to break this to the next line
+    </span>
+  )}
+</div>;
+
+<div>
+  {a &&
+    b && (
+      <span>
+        make this text just so long enough to break this to the next line
+      </span>
+    )}
+</div>;
+
+<div>
+  {a && (
+    <span>
       <div>
         <div />
       </div>
@@ -684,7 +843,7 @@ exports[`logical-expression.js 1`] = `
 
 `;
 
-exports[`object-property.js 1`] = `
+exports[`object-property.js - flow-verify 1`] = `
 const tabs = [
   {
     title: "General Info",
@@ -715,7 +874,7 @@ const tabs = [
 
 `;
 
-exports[`open-break.js 1`] = `
+exports[`open-break.js - flow-verify 1`] = `
 <td
 onClick={() => {
   a
@@ -725,6 +884,8 @@ onClick={() => {
 onClick={() => {
   a
 }}>{header}<showSort attr="long long long long long long long long long long long"/></td>;
+
+<Foo>{\`    a    very    long    text    that    does    not    break    \`}</Foo>;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 <td
   onClick={() => {
@@ -744,9 +905,11 @@ onClick={() => {
   <showSort attr="long long long long long long long long long long long" />
 </td>;
 
+<Foo>{\`    a    very    long    text    that    does    not    break    \`}</Foo>;
+
 `;
 
-exports[`parens.js 1`] = `
+exports[`parens.js - flow-verify 1`] = `
 a = [
   <path
     key='0'
@@ -775,7 +938,7 @@ a = [
 
 `;
 
-exports[`quotes.js 1`] = `
+exports[`quotes.js - flow-verify 1`] = `
 <div id="&quot;'<>&amp;quot;" />;
 <div id='"&#39;<>&amp;quot;' />;
 <div id={'\\'"&quot;<>&amp;quot;'} />;
@@ -786,7 +949,7 @@ exports[`quotes.js 1`] = `
 
 `;
 
-exports[`return-statement.js 1`] = `
+exports[`return-statement.js - flow-verify 1`] = `
 const NonBreakingArrowExpression = () => <div />;
 
 const BreakingArrowExpression = () => <div>
@@ -891,7 +1054,7 @@ class BreakingClass extends React.component {
 
 `;
 
-exports[`spacing.js 1`] = `
+exports[`spacing.js - flow-verify 1`] = `
 const Labels = {
   label1: (
     <fbt>

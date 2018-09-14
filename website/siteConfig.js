@@ -1,14 +1,25 @@
 "use strict";
 
+// Docs: https://docusaurus.io/docs/en/site-config.html
+
+const parseYaml = require("js-yaml").safeLoad;
+const path = require("path");
+const fs = require("fs");
+
 const PACKAGE = require("../package");
 const GITHUB_URL = `https://github.com/${PACKAGE.repository}`;
 
-const users = require("./users");
-const editors = require("./editors");
-const supportedLanguages = require("./languages");
+function loadYaml(fsPath) {
+  return parseYaml(fs.readFileSync(path.join(__dirname, fsPath), "utf8"));
+}
+
+const users = loadYaml("./data/users.yml");
+const editors = loadYaml("./data/editors.yml");
+const supportedLanguages = loadYaml("./data/languages.yml");
 
 const siteConfig = {
   title: "Prettier",
+  tagline: "Opinionated Code Formatter",
   githubUrl: GITHUB_URL,
   url: PACKAGE.homepage,
   baseUrl: "/",
@@ -21,8 +32,11 @@ const siteConfig = {
   /* base url for editing docs, usage example: editUrl + 'en/doc1.md' */
   editUrl: `${GITHUB_URL}/edit/master/docs/`,
   headerLinks: [
-    { doc: "why-prettier", label: "Docs" },
     { href: "/playground/", label: "Playground" },
+    { doc: "index", label: "About" },
+    { doc: "install", label: "Usage" },
+    { blog: true, label: "Blog" },
+    { search: true },
     { href: GITHUB_URL, label: "GitHub" }
   ],
   /* path to images for header/footer */
@@ -32,12 +46,42 @@ const siteConfig = {
   /* colors for website */
   colors: {
     primaryColor: "#1A2B34",
-    secondaryColor: "#808080",
-    prismColor:
-      "rgba(26, 43, 52, 0.03)" /* primaryColor in rgba form, with 0.03 alpha */
+    secondaryColor: "#808080"
   },
-  tagline: "Opinionated Code Formatter",
-  useEnglishUrl: true
+  highlight: {
+    theme: "default"
+  },
+  useEnglishUrl: true,
+  scripts: ["https://buttons.github.io/buttons.js"],
+  stylesheets: [
+    "//unpkg.com/@sandhose/prettier-animated-logo@1.0.3/dist/wide.css"
+  ],
+  algolia: {
+    apiKey: process.env.ALGOLIA_PRETTIER_API_KEY,
+    indexName: "prettier"
+  },
+  markdownPlugins: [
+    // ignore `<!-- prettier-ignore -->` before passing into Docusaurus to avoid mis-parsing (#3322)
+    md => {
+      md.block.ruler.before(
+        "htmlblock",
+        "prettierignore",
+        (state, startLine) => {
+          const pos = state.bMarks[startLine];
+          const max = state.eMarks[startLine];
+          if (/<!-- prettier-ignore -->/.test(state.src.slice(pos, max))) {
+            state.line += 1;
+            return true;
+          }
+          return false;
+        }
+      );
+    }
+  ],
+  separateCss: ["static/separate-css"],
+  gaTrackingId: "UA-111350464-1",
+  twitter: true,
+  onPageNav: "separate"
 };
 
 module.exports = siteConfig;
